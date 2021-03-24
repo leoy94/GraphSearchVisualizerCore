@@ -1,21 +1,25 @@
-import {IVertex, Vertex} from "../Vertex/Vertex";
+import {IGameVertex, GameVertex} from "../Vertex/Vertex";
 
-export interface IAdjList extends Map<string,IVertex>{
+export interface IAdjList extends Map<string,IGameVertex>{
     addVertex: (payload: any, id: string) => void;
     addEdge: (vertexID: string, edgeID: string) => void;
     removeEdge: (vertexID: string, edgeID: string) => void;
+
     bfs: (startID: string, findID:string) => {length: number, path?: string[]};
     dfs: (startID: string, findID:string) => {length: number, path?: string[]};
 
 
     //to do
+    //getEdges
+
     biDir?: (startID: string, findID:string) => {length: number, path?: string[]};
+    
 }
 
 export class AdjList extends Map implements IAdjList{
 
     addVertex(payload: any, id: string){
-        this.set(id, new Vertex(payload, id));
+        this.set(id, new GameVertex(payload, id));
     }
 
     addEdge(vertexID: string, edgeID: string){

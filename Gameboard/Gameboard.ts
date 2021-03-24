@@ -1,6 +1,7 @@
-import { DefaultKeyword, isArrowFunction } from "typescript";
+// import { DefaultKeyword, isArrowFunction } from "typescript";
 import {IAdjList, AdjList} from "../AdjList/AdjList";
 import {IAnimations, Animations} from "../Animation/Animation";
+import {IGameVertex} from "../Vertex/Vertex";
 
 enum defAlgs {
     default
@@ -21,16 +22,26 @@ export interface IGameboard {
 export abstract class AbsGameboard implements IGameboard {
     name: string = "default";
     public size = {
-        height: 10,
-        width: 10
+        height: 3,
+        width: 5
     };
+
     gameboard?: IAdjList;
     animations?: IAnimations;
     currentAlg: number = 0;
     algs: any = defAlgs;
 
     createGameboard: () => IAdjList = () => {
-        return new AdjList();
+        let gameBoard =  new AdjList();
+        const {height, width} = this.size;
+        const size = height * width;
+        for(let i = 1; i <= size; i++){
+            gameBoard.addVertex({
+
+            },i.toString());
+        }
+        return gameBoard;
+
     }
 
     generateAnimations?:() => IAnimations = () => {
@@ -38,10 +49,11 @@ export abstract class AbsGameboard implements IGameboard {
     }
 
     constructor(name?: string, height?: number, width?: number, algs?: any){
+        // console.log(height, width);
         if(height && width){
-            let {height:heightState, width:widthState} = this.size; 
-            heightState = height; 
-            widthState = width;
+
+            this.size.height = height;
+            this.size.width = width;
         }
 
         if(algs){
@@ -51,7 +63,6 @@ export abstract class AbsGameboard implements IGameboard {
         if(name){
             this.name = name;
         }
-
     }
 
 }
@@ -61,28 +72,28 @@ enum algs {
     DFS,
 }
 
-interface IGame extends AbsGameboard { 
+interface IGame extends AbsGameboard {
+    startVertexid?: string;
+    endVertexid?: string;
+    blockedids?:  Map<string,string>;
 }
 
 export class Game extends AbsGameboard implements IGame{
 
     constructor(name?: string, height?: number, width?: number){
         super(name, height, width, algs);
-        this.createGameboard.bind;
 
-        this.gameboard = this.createGameboard();
+        this.gameboard = this.createGameboard.call(this);
         this.animations = this.generateAnimations();
 
     }
 
     generateAnimations = (): IAnimations => {
-      
+
             switch(this.currentAlg){
                 case 0: return this.generateBFSAnimationFrames();
                 default: console.log(this);
-            
             }
-
         return new Animations("Error");
     } 
 

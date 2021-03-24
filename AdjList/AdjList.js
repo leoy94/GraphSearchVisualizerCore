@@ -4,7 +4,7 @@ exports.AdjList = void 0;
 const Vertex_1 = require("../Vertex/Vertex");
 class AdjList extends Map {
     addVertex(payload, id) {
-        this.set(id, new Vertex_1.Vertex(payload, id));
+        this.set(id, new Vertex_1.GameVertex(payload, id));
     }
     addEdge(vertexID, edgeID) {
         this.get(vertexID).addEdge(edgeID);

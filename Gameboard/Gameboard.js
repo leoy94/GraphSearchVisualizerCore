@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Game = exports.AbsGameboard = void 0;
+// import { DefaultKeyword, isArrowFunction } from "typescript";
 const AdjList_1 = require("../AdjList/AdjList");
 const Animation_1 = require("../Animation/Animation");
 var defAlgs;
@@ -11,21 +12,27 @@ class AbsGameboard {
     constructor(name, height, width, algs) {
         this.name = "default";
         this.size = {
-            height: 10,
-            width: 10
+            height: 3,
+            width: 5
         };
         this.currentAlg = 0;
         this.algs = defAlgs;
         this.createGameboard = () => {
-            return new AdjList_1.AdjList();
+            let gameBoard = new AdjList_1.AdjList();
+            const { height, width } = this.size;
+            const size = height * width;
+            for (let i = 1; i <= size; i++) {
+                gameBoard.addVertex({}, i.toString());
+            }
+            return gameBoard;
         };
         this.generateAnimations = () => {
             return new Animation_1.Animations(this.algs[this.currentAlg]);
         };
+        // console.log(height, width);
         if (height && width) {
-            let { height: heightState, width: widthState } = this.size;
-            heightState = height;
-            widthState = width;
+            this.size.height = height;
+            this.size.width = width;
         }
         if (algs) {
             this.algs = algs;
@@ -51,8 +58,7 @@ class Game extends AbsGameboard {
             }
             return new Animation_1.Animations("Error");
         };
-        this.createGameboard.bind;
-        this.gameboard = this.createGameboard();
+        this.gameboard = this.createGameboard.call(this);
         this.animations = this.generateAnimations();
     }
     generateBFSAnimationFrames() {
